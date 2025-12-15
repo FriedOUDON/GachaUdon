@@ -7,12 +7,16 @@ public class GachaPrize {
     private final ItemStack template;
     private final double chancePercent;
     private final String displayName;
+    private final String rarity;
+    private final int rarityRank;
 
-    public GachaPrize(String itemId, ItemStack template, double chancePercent, String displayName) {
+    public GachaPrize(String itemId, ItemStack template, double chancePercent, String displayName, String rarity, int rarityRank) {
         this.itemId = itemId;
         this.template = template;
         this.chancePercent = chancePercent;
         this.displayName = displayName;
+        this.rarity = rarity;
+        this.rarityRank = rarityRank;
     }
 
     public String itemId() {
@@ -33,5 +37,13 @@ public class GachaPrize {
 
     public String displayName() {
         return displayName;
+    }
+
+    public String rarity() {
+        return rarity;
+    }
+
+    public int rarityRank() {
+        return rarityRank;
     }
 }

@@ -8,6 +8,7 @@ Vault で料金を徴収してガチャを回せる Paper/Spigot プラグイン
 - Vault 経済連携。価格が 0 のマシンは Vault なしでも動作。
 - 英語/日本語メッセージ同梱。`plugins/GachaUdon/lang/` で上書き可能。
 - `/gacha` の追加エイリアスを `config.yml` で設定可能。
+- 天井（ピティ）ルールをマシンごとに設定可能。「30連でレア以上1冊確定」「100連でレジェンド確定」などが書けます。
 
 ## コマンド
 - `/gacha list` - マシン一覧を表示。
@@ -32,6 +33,8 @@ Vault で料金を徴収してガチャを回せる Paper/Spigot プラグイン
 - `maxRollsPerCommand` - 1 度に回せる最大回数（既定値 10）。
 - `machineFolder` - マシン YAML を置くフォルダ名（既定: `Machine`）。
 - `defaultLocale` - サーバー/JVM ロケールを上書きする場合に指定。
+- `rarityOrder` - 低い順にレアリティを並べる。天井の判定に使用。
+- `defaultRarity` - アイテムに rarity が書かれていない場合に使うレアリティ。
 - `discord.*` - EssentialsX Discord で結果を送信する設定。
 
 ### EssentialsX Discord 設定例
@@ -72,6 +75,18 @@ items:
   - item: "minecraft:iron_ingot"
     amount: 8
     chance: 12.5
+    rarity: common
+  - item: "minecraft:gold_ingot"
+    amount: 4
+    chance: 4.5
+    rarity: rare
+pity:
+  - pulls: 30
+    minRarity: rare
+    message: "&6レア以上1冊確定 (30連天井)"
+  - pulls: 100
+    minRarity: legendary
+    message: "&d宝/レジェンド確定 (100連天井)"
 ```
 
 マシンが見つからない場合、`sample.yml` が自動で生成されます。

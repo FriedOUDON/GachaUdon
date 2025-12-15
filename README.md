@@ -9,6 +9,7 @@ Paper/Spigot plugin that lets players pay via Vault to roll configurable gacha m
 - Vault economy support for charging per roll; zero-price machines work without Vault.
 - Localization (English/Japanese) with external overrides under `plugins/GachaUdon/lang/`.
 - Command aliases configurable in `config.yml`.
+- Per-machine pity rules (guaranteed rarity after N pulls), e.g., “1 rare or better every 30 pulls” / “legendary guaranteed at 100 pulls.”
 
 ## Commands
 - `/gacha list` - show available machines.
@@ -33,6 +34,8 @@ Right-click a sign with the following lines to run a gacha without typing a comm
 - `maxRollsPerCommand` - limit batch rolls (default 10).
 - `machineFolder` - folder name for machine YAMLs (default `Machine`).
 - `defaultLocale` - blank to follow server locale.
+- `rarityOrder` - list rarities from lowest to highest; used by pity checks.
+- `defaultRarity` - fallback rarity when a prize omits `rarity`.
 - `discord.*` - enable EssentialsX Discord relay of roll results.
 
 ### EssentialsX Discord example
@@ -73,6 +76,18 @@ items:
   - item: "minecraft:iron_ingot"
     amount: 8
     chance: 12.5
+    rarity: common
+  - item: "minecraft:gold_ingot"
+    amount: 4
+    chance: 4.5
+    rarity: rare
+pity:
+  - pulls: 30
+    minRarity: rare
+    message: "&6Guaranteed rare+ every 30 pulls"
+  - pulls: 100
+    minRarity: legendary
+    message: "&dLegendary guaranteed at 100 pulls"
 ```
 
 If no machines are present, a sample `sample.yml` is created automatically.

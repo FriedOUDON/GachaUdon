@@ -23,6 +23,7 @@ public class GachaUdonPlugin extends JavaPlugin {
     private MachineService machines;
     private Economy economy;
     private DiscordBridge discord;
+    private PityService pity;
 
     @Override
     public void onEnable() {
@@ -35,6 +36,7 @@ public class GachaUdonPlugin extends JavaPlugin {
         messages = new MessageService(this);
         machines = new MachineService(this);
         machines.reload();
+        pity = new PityService(this);
         setupEconomy();
         applyCommandAliases();
         discord = new DiscordBridge(this);
@@ -53,11 +55,6 @@ public class GachaUdonPlugin extends JavaPlugin {
         getLogger().info("GachaUdon enabled");
     }
 
-    @Override
-    public void onDisable() {
-        getLogger().info("GachaUdon disabled");
-    }
-
     public MessageService messages() {
         return messages;
     }
@@ -72,6 +69,10 @@ public class GachaUdonPlugin extends JavaPlugin {
 
     public DiscordBridge discord() {
         return discord;
+    }
+
+    public PityService pity() {
+        return pity;
     }
 
     public boolean hasEconomy() {
@@ -198,5 +199,11 @@ public class GachaUdonPlugin extends JavaPlugin {
         if (economy == null) {
             getLogger().info("No Vault economy provider found; gacha payments disabled");
         }
+    }
+
+    @Override
+    public void onDisable() {
+        if (pity != null) pity.save();
+        getLogger().info("GachaUdon disabled");
     }
 }

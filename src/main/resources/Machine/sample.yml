@@ -15,6 +15,14 @@
 # *C items.lore: アイテムの説明文。複数行指定可。
 # *  items.enchants.*: アイテムに付与するエンチャント。enchantsの下にエンチャント名とレベルを指定すること。
 #       例: sharpness: 5
+# 
+# =======================================================================================================
+# ～天井設定(pity)の書き方サンプル～
+# 
+#    pity.pulls: 連続でガチャを引いた場合に天井を発動させる回数。
+#    pity.minRarity: 天井発動時に最低限保証するレアリティ。common, rare, epic, legendary のいずれか。
+#  C pity.message: 天井発動時に表示するメッセージ。
+# 
 # =======================================================================================================
 
 
@@ -26,29 +34,40 @@ items:
   - item: "minecraft:diamond"
     amount: 1
     chance: 0.5
-    displayName: "&b(ダイヤモンドの名前)"
-    lore: 
-      - "&7これはダイヤモンドの説明文です。1行目"
-      - "&7これはダイヤモンドの説明文です。2行目"
+    rarity: legendary
+    displayName: "&bShiny Diamond"
+    lore:
+      - "&7Bright and valuable."
 
   - item: "minecraft:enchanted_book"
     amount: 1
     chance: 3.0
-    displayName: "&dなんか鋭い本"
+    rarity: epic
+    displayName: "&dSharp Book"
     lore:
-      - "鋭さ最大！！"
-      - "&7使い方は自分で考えろ！！"
+      - "&7Contains Sharpness V."
     enchants:
       sharpness: 5
 
   - item: "minecraft:gold_ingot"
     amount: 4
     chance: 4.5
+    rarity: rare
 
   - item: "minecraft:iron_ingot"
     amount: 8
     chance: 12.5
+    rarity: uncommon
 
   - item: "minecraft:bread"
     amount: 16
     chance: 35.0
+    rarity: common
+
+pity:
+  - pulls: 30
+    minRarity: rare
+    message: "&6レア以上1冊確定 (30連天井)"
+  - pulls: 100
+    minRarity: legendary
+    message: "&d宝/レジェンド確定 (100連天井)"

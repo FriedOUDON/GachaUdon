@@ -11,6 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -22,6 +23,8 @@ public class MachineService {
     private final GachaUdonPlugin plugin;
     private final Map<String, GachaMachine> machines = new LinkedHashMap<>();
     private final Random random = new Random();
+    private Map<String, Integer> rarityRanks = new HashMap<>();
+    private String defaultRarity = "common";
 
     public MachineService(GachaUdonPlugin plugin) {
         this.plugin = plugin;
@@ -29,6 +32,7 @@ public class MachineService {
 
     public void reload() {
         machines.clear();
+        loadRarityConfig();
         File folder = machineFolder();
         if (!folder.exists() && !folder.mkdirs()) {
             plugin.getLogger().warning("Could not create machine folder at " + folder.getAbsolutePath());
@@ -121,7 +125,11 @@ public class MachineService {
                     ? stack.getItemMeta().getDisplayName()
                     : friendlyName(mat);
 
-            prizes.add(new GachaPrize(itemId, stack, chance, displayItemName));
+            String rarityName = asString(raw.get("rarity")).trim().toLowerCase(Locale.ROOT);
+            if (rarityName.isEmpty()) rarityName = defaultRarity;
+            int rarityRank = rarityRanks.getOrDefault(rarityName, rarityRanks.getOrDefault(defaultRarity, 0));
+
+            prizes.add(new GachaPrize(itemId, stack, chance, displayItemName, rarityName, rarityRank));
         }
 
         if (prizes.isEmpty()) {
@@ -129,7 +137,9 @@ public class MachineService {
             return;
         }
 
-        machines.put(id, new GachaMachine(id, displayName, price, prizes));
+        List<PityRule> pityRules = loadPityRules(cfg, file.getName());
+
+        machines.put(id, new GachaMachine(id, displayName, price, prizes, pityRules));
     }
 
     private double readDouble(Object value) {
@@ -216,6 +226,61 @@ public class MachineService {
             }
         }
         return null;
+    }
+
+    private void loadRarityConfig() {
+        rarityRanks.clear();
+        List<String> configured = plugin.getConfig().getStringList("rarityOrder");
+        List<String> cleaned = new ArrayList<>();
+        for (String s : configured) {
+            if (s == null) continue;
+            String normalized = s.trim().toLowerCase(Locale.ROOT);
+            if (normalized.isEmpty()) continue;
+            if (!cleaned.contains(normalized)) cleaned.add(normalized);
+        }
+        if (cleaned.isEmpty()) {
+            cleaned = List.of("common", "uncommon", "rare", "epic", "legendary");
+        }
+        String cfgDefault = plugin.getConfig().getString("defaultRarity", "");
+        if (cfgDefault != null && !cfgDefault.isBlank()) {
+            defaultRarity = cfgDefault.trim().toLowerCase(Locale.ROOT);
+        } else {
+            defaultRarity = cleaned.get(0);
+        }
+        if (!cleaned.contains(defaultRarity)) {
+            cleaned = new ArrayList<>(cleaned);
+            cleaned.add(defaultRarity);
+        }
+        for (int i = 0; i < cleaned.size(); i++) {
+            rarityRanks.put(cleaned.get(i), i);
+        }
+    }
+
+    private List<PityRule> loadPityRules(YamlConfiguration cfg, String sourceName) {
+        List<Map<?, ?>> rawRules = cfg.getMapList("pity");
+        List<PityRule> rules = new ArrayList<>();
+        for (Map<?, ?> raw : rawRules) {
+            if (raw == null) continue;
+            Integer threshold = asInt(raw.get("pulls"));
+            if (threshold == null || threshold <= 0) threshold = asInt(raw.get("rolls"));
+            if (threshold == null || threshold <= 0) threshold = asInt(raw.get("threshold"));
+            if (threshold == null || threshold <= 0) {
+                plugin.getLogger().warning("Pity rule missing threshold in " + sourceName);
+                continue;
+            }
+            String rarityName = asString(raw.get("minRarity"));
+            if (rarityName.isBlank()) rarityName = asString(raw.get("rarity"));
+            rarityName = rarityName.trim();
+            if (rarityName.isBlank()) {
+                plugin.getLogger().warning("Pity rule missing minRarity in " + sourceName);
+                continue;
+            }
+            String rarityKey = rarityName.toLowerCase(Locale.ROOT);
+            int rank = rarityRanks.getOrDefault(rarityKey, rarityRanks.getOrDefault(defaultRarity, 0));
+            String message = asString(raw.get("message"));
+            rules.add(new PityRule(threshold, rarityName, rank, message));
+        }
+        return rules;
     }
 
     private void applyEnchants(ItemMeta meta, Object rawEnchants) {

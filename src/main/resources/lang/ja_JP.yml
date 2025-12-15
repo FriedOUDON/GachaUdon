@@ -24,10 +24,13 @@ list:
 info:
   header: "%name%&r (%id%) 価格: &a%cost%&r"
   entry: "- %item%&r x%amount% | %chance%%"
+  pity-header: "&6天井"
+  pity-entry: "&7%pulls%連: %rarity% 以上確定"
 
 roll:
   result-single: "%machine%&r で %item%&r x%amount% を引きました。"
   result-summary: "%machine%&r の結果: %results%。"
+  pity-hit: "&e天井発動! %pulls%連目で %rarity% 以上が確定枠になりました。"
 
 broadcast:
   result-single: "%player%&r が %machine%&r で %item%&r x%amount% を引きました。"

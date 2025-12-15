@@ -25,7 +25,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -60,6 +59,7 @@ public class GachaCommand implements CommandExecutor {
                 plugin.reloadConfig();
                 plugin.messages().reload();
                 plugin.machines().reload();
+                plugin.pity().reload();
                 plugin.applyCommandAliases();
                 plugin.discord().reload();
                 sender.sendMessage(msg(sender, "reloaded", null));
@@ -110,6 +110,15 @@ public class GachaCommand implements CommandExecutor {
         headerVars.put("name", machine.displayName());
         headerVars.put("cost", formatCurrency(machine.price()));
         sender.sendMessage(msg(sender, "info.header", headerVars));
+        if (!machine.pityRules().isEmpty()) {
+            sender.sendMessage(msg(sender, "info.pity-header", null));
+            for (PityRule rule : machine.pityRules()) {
+                Map<String, String> vars = new LinkedHashMap<>();
+                vars.put("pulls", String.valueOf(rule.threshold()));
+                vars.put("rarity", rule.minRarityName());
+                sender.sendMessage(msg(sender, "info.pity-entry", vars));
+            }
+        }
         for (GachaPrize prize : machine.prizes()) {
             Map<String, String> vars = new LinkedHashMap<>();
             vars.put("item", infoItemName(prize, locale));
@@ -185,11 +194,29 @@ public class GachaCommand implements CommandExecutor {
         List<ItemStack> awarded = new ArrayList<>();
         Locale locale = effectiveItemLocale(player);
         for (int i = 0; i < count; i++) {
-            GachaPrize prize = machine.roll(plugin.machines().random());
+            PityService.PityOutcome outcome = plugin.pity().roll(player.getUniqueId(), machine, plugin.machines().random());
+            GachaPrize prize = outcome.prize();
             if (prize == null) {
                 sender.sendMessage(msg(sender, "errors.empty-machine", Map.of("id", machine.id())));
                 return;
             }
+            if (outcome.pityHit()) {
+                Map<String, String> pityVars = new LinkedHashMap<>();
+                pityVars.put("rarity", outcome.rule().minRarityName());
+                pityVars.put("pulls", String.valueOf(outcome.rule().threshold()));
+                pityVars.put("machine", machine.displayName());
+                String customMessage = outcome.rule().message();
+                if (customMessage != null && !customMessage.isBlank()) {
+                    String rendered = customMessage
+                            .replace("%rarity%", pityVars.get("rarity"))
+                            .replace("%pulls%", pityVars.get("pulls"))
+                            .replace("%machine%", pityVars.get("machine"));
+                    sender.sendMessage(colorize(rendered));
+                } else {
+                    sender.sendMessage(msg(sender, "roll.pity-hit", pityVars));
+                }
+            }
+
             ItemStack stack = prize.createStack();
             var leftover = player.getInventory().addItem(stack);
             if (!leftover.isEmpty()) {

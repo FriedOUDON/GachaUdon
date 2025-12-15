@@ -24,10 +24,13 @@ list:
 info:
   header: "%name% (%id%) cost: %cost%"
   entry: "- %item% x%amount% | %chance%%"
+  pity-header: "&6Pity:"
+  pity-entry: "&7%pulls%x: %rarity% or higher"
 
 roll:
   result-single: "You pulled %item% x%amount% from %machine%."
   result-summary: "Results from %machine%: %results%."
+  pity-hit: "&ePity triggered! Guaranteed %rarity%+ on roll %pulls%."
 broadcast:
   result-single: "%player% pulled %item% x%amount% from %machine%."
   result-summary: "%player%'s results from %machine% (%count% roll(s)): %results%."

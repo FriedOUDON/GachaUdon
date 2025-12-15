@@ -10,6 +10,12 @@ disableWorlds: []
 # Folder (under plugins/GachaUdon) that stores machine YAML files
 machineFolder: "Machine"
 
+# Rarity order for pity rules and display. Lower index = lower rarity.
+# Add or change entries to match your machine YAMLs (e.g., ["common","rare","legendary"])
+rarityOrder: ["common", "rare", "epic", "legendary"]
+# Default rarity when an item omits "rarity" in YAML.
+defaultRarity: "common"
+
 # Format for item names in /gacha info when a displayName is set.
 # Available placeholders: %displayName%, %vanilla%
 info:
