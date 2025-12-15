@@ -1,0 +1,20 @@
+name: GachaUdon
+main: com.FriedOUDON.GachaUdon.GachaUdonPlugin
+version: 1.0.0-SNAPSHOT
+api-version: "1.21"
+softdepend: [Vault, EssentialsDiscord]
+
+commands:
+  gacha:
+    description: GachaUdon main command (roll gacha machines)
+    usage: "/gacha roll <machine> [count] | info <machine> | list | reload"
+    permission: gachaudon.use
+    aliases: []
+
+permissions:
+  gachaudon.use:
+    default: true
+  gachaudon.admin:
+    default: op
+  gachaudon.broadcast:
+    default: op

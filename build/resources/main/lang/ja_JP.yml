@@ -1,0 +1,39 @@
+﻿reloaded: "設定とマシン定義を再読み込みしました。"
+no-permission: "権限がありません。"
+unknown-subcommand: "不明なサブコマンドです。"
+
+errors:
+  players-only: "プレイヤーのみ実行できます。"
+  usage-roll: "使い方: /%label% roll <machine> [回数]"
+  usage-info: "使い方: /%label% info <machine>"
+  unknown-machine: "マシン %id% は見つかりません。"
+  empty-machine: "マシン %id% に景品が設定されていません。"
+  invalid-count: "回数は 1〜%max% の範囲で指定してください。"
+  no-machines: "ガチャマシンが見つかりません。plugins/GachaUdon/Machine にYAMLを配置してください。"
+  disabled-world: "このワールドではガチャを使用できません。"
+
+payments:
+  no-economy: "Vault対応の経済プラグインが見つからないため支払いできません。"
+  insufficient: "この操作には %cost% が必要です。"
+  charged: "%count% 回分として %cost% 支払いました。"
+
+list:
+  header: "利用可能なガチャマシン (%count% 件):"
+  entry: "%id% - %name% (価格: &a%cost%&r)"
+
+info:
+  header: "%name%&r (%id%) 価格: &a%cost%&r"
+  entry: "- %item%&r x%amount% | %chance%%"
+
+roll:
+  result-single: "%machine%&r で %item%&r x%amount% を引きました。"
+  result-summary: "%machine%&r の結果: %results%。"
+
+broadcast:
+  result-single: "%player%&r が %machine%&r で %item%&r x%amount% を引きました。"
+  result-summary: "%player%&r の %machine%&r 結果: %results%&r。"
+
+sign:
+  missing-machine: "看板の2行目にガチャのマシン名を入力してください。"
+  invalid-action: "看板3行目には回数または info を入力してください。（空欄時は1回roll）"
+

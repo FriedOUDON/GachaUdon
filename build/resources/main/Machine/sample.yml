@@ -1,0 +1,54 @@
+# Sample gacha machine
+
+# =======================================================================================================
+# ～ガチャマシンYAMLファイルの書き方サンプル～
+# 先頭に「*」をつけた項目は省略可能、「C」をつけた項目は色コードが使用可能。
+# 
+#    id: コマンドで指定するガチャマシンの名前。アルファベットが望ましい。重複禁止。
+#  C displayName: ガチャマシンの表示名。
+#    price: ガチャの価格（1回あたり）。
+#    
+#    items.item: アイテムのID（例: "minecraft:diamond"）。
+#    items.amount: アイテムの数量。
+#    items.chance: アイテムの当選確率。全アイテムのchanceの合計は100になるようにすること。
+# *C items.displayName: アイテムの表示名。
+# *C items.lore: アイテムの説明文。複数行指定可。
+# *  items.enchants.*: アイテムに付与するエンチャント。enchantsの下にエンチャント名とレベルを指定すること。
+#       例: sharpness: 5
+# =======================================================================================================
+
+
+id: sample
+displayName: "&bSample Machine"
+price: 250.0
+
+items:
+  - item: "minecraft:diamond"
+    amount: 1
+    chance: 0.5
+    displayName: "&b(ダイヤモンドの名前)"
+    lore: 
+      - "&7これはダイヤモンドの説明文です。1行目"
+      - "&7これはダイヤモンドの説明文です。2行目"
+
+  - item: "minecraft:enchanted_book"
+    amount: 1
+    chance: 3.0
+    displayName: "&dなんか鋭い本"
+    lore:
+      - "鋭さ最大！！"
+      - "&7使い方は自分で考えろ！！"
+    enchants:
+      sharpness: 5
+
+  - item: "minecraft:gold_ingot"
+    amount: 4
+    chance: 4.5
+
+  - item: "minecraft:iron_ingot"
+    amount: 8
+    chance: 12.5
+
+  - item: "minecraft:bread"
+    amount: 16
+    chance: 35.0

@@ -1,0 +1,37 @@
+reloaded: "Reloaded config and machines."
+no-permission: "You don't have permission."
+unknown-subcommand: "Unknown subcommand."
+
+errors:
+  players-only: "Players only."
+  usage-roll: "Usage: /%label% roll <machine> [count]"
+  usage-info: "Usage: /%label% info <machine>"
+  unknown-machine: "Unknown machine: %id%."
+  empty-machine: "Machine %id% has no prizes configured."
+  invalid-count: "Count must be between 1 and %max%."
+  no-machines: "No machines found. Place YAML files under plugins/GachaUdon/Machine."
+  disabled-world: "Gacha is disabled in world %world%."
+
+payments:
+  no-economy: "Economy (Vault) is not available."
+  insufficient: "You need %cost% to roll that."
+  charged: "Charged %cost% for %count% roll(s)."
+
+list:
+  header: "Machines (%count%):"
+  entry: "%id% - %name% (cost: %cost%)"
+
+info:
+  header: "%name% (%id%) cost: %cost%"
+  entry: "- %item% x%amount% | %chance%%"
+
+roll:
+  result-single: "You pulled %item% x%amount% from %machine%."
+  result-summary: "Results from %machine%: %results%."
+broadcast:
+  result-single: "%player% pulled %item% x%amount% from %machine%."
+  result-summary: "%player%'s results from %machine% (%count% roll(s)): %results%."
+
+sign:
+  missing-machine: "This gacha sign is missing a machine id on line 2."
+  invalid-action: "Invalid text on line 3. Enter a roll count or 'info' (blank = roll once)."

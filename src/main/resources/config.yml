@@ -1,0 +1,31 @@
+# Extra aliases for /gacha (e.g., ["gu", "gachaudon"])
+commandAliases: ["gu"]
+
+# Maximum rolls a player can request in a single command (change as needed)
+maxRollsPerCommand: 100
+
+# Worlds where gacha commands are disabled
+disableWorlds: []
+
+# Folder (under plugins/GachaUdon) that stores machine YAML files
+machineFolder: "Machine"
+
+# Format for item names in /gacha info when a displayName is set.
+# Available placeholders: %displayName%, %vanilla%
+info:
+  itemDisplayFormat: "%displayName%&7(%vanilla%)&r"
+
+# Force item name locale (e.g., "ja_JP"). Leave blank to follow player locale.
+itemNameLocaleOverride: ""
+
+# Default message locale. Leave blank to follow the server/JVM locale.
+defaultLocale: ""
+
+# Discord relay via EssentialsX Discord
+discord:
+  # Send gacha roll results to Discord. Requires the EssentialsX Discord plugin to be installed and configured.
+  sendRollResults: false
+  # Message type key to register with EssentialsX Discord. Configure the channel for this key in EssentialsDiscord/config.yml under message-types.
+  messageType: "gachaudon"
+  # Allow Discord mentions like @everyone/@here in sent messages.
+  allowMentions: false
